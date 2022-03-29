@@ -36,28 +36,33 @@ export const validarLogin = async ( email:string, password: string, response: Re
             values : [email],
         },async (error: MysqlError, respuestaDb: any) => {   
             const consulta = respuestaDb; 
-            decryptPassword (password, consulta[0]['contrasena']).then(async(respuesta: any) => {
-                    if(respuesta){
-                        const data: LoginModel = new LoginModel;
-                        let token = await generarJWT(consulta[0]['uuid'], consulta[0]['contrasena'], consulta[0]['contrasena'])
-                        data.uuid       = consulta[0]['uuid']
-                        data.p_nombre   = consulta[0]['p_nombre']
-                        data.p_apellido = consulta[0]['p_apellido']
-                        data.tipo_documento = consulta[0]['tipo_documento']
-                        data.nombre_corto_documento = consulta[0]['n_corto']
-                        data.email = consulta[0]['email']
-                        data.docuemento = consulta[0]['docuemento']
-                        data.rol = consulta[0]['rol']
-                        data.ip_remota = consulta[0]['ip_remota']
-                        data.intentos_login = consulta[0]['intentos_login']
-                        data.online = consulta[0]['online']
-                        data.token = token ;
-                        resolve(data);
-                    } else {
-                        console.log("no");
-                        
-                    }
-            })
+            if(respuestaDb.length > 0){
+                decryptPassword (password, consulta[0]['contrasena']).then(async(respuesta: any) => {
+                        if(respuesta){
+                            const data: LoginModel = new LoginModel;
+                            let token = await generarJWT(consulta[0]['uuid'], consulta[0]['contrasena'], consulta[0]['contrasena'])
+                            data.uuid       = consulta[0]['uuid']
+                            data.p_nombre   = consulta[0]['p_nombre']
+                            data.p_apellido = consulta[0]['p_apellido']
+                            data.tipo_documento = consulta[0]['tipo_documento']
+                            data.nombre_corto_documento = consulta[0]['n_corto']
+                            data.email = consulta[0]['email']
+                            data.docuemento = consulta[0]['docuemento']
+                            data.rol = consulta[0]['rol']
+                            data.ip_remota = consulta[0]['ip_remota']
+                            data.intentos_login = consulta[0]['intentos_login']
+                            data.online = consulta[0]['online']
+                            data.token = token ;
+                            resolve(data);
+                        } else {
+                            resolve(null);
+                            
+                        }
+                })
+            }else {
+               resolve(null)
+                
+            }
         })
     })
 }

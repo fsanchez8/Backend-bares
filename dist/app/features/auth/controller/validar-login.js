@@ -47,28 +47,33 @@ const validarLogin = (email, password, response) => __awaiter(void 0, void 0, vo
             values: [email],
         }, (error, respuestaDb) => __awaiter(void 0, void 0, void 0, function* () {
             const consulta = respuestaDb;
-            (0, crypt_1.decryptPassword)(password, consulta[0]['contrasena']).then((respuesta) => __awaiter(void 0, void 0, void 0, function* () {
-                if (respuesta) {
-                    const data = new login_model_1.default;
-                    let token = yield (0, jwt_1.generarJWT)(consulta[0]['uuid'], consulta[0]['contrasena'], consulta[0]['contrasena']);
-                    data.uuid = consulta[0]['uuid'];
-                    data.p_nombre = consulta[0]['p_nombre'];
-                    data.p_apellido = consulta[0]['p_apellido'];
-                    data.tipo_documento = consulta[0]['tipo_documento'];
-                    data.nombre_corto_documento = consulta[0]['n_corto'];
-                    data.email = consulta[0]['email'];
-                    data.docuemento = consulta[0]['docuemento'];
-                    data.rol = consulta[0]['rol'];
-                    data.ip_remota = consulta[0]['ip_remota'];
-                    data.intentos_login = consulta[0]['intentos_login'];
-                    data.online = consulta[0]['online'];
-                    data.token = token;
-                    resolve(data);
-                }
-                else {
-                    console.log("no");
-                }
-            }));
+            if (respuestaDb.length > 0) {
+                (0, crypt_1.decryptPassword)(password, consulta[0]['contrasena']).then((respuesta) => __awaiter(void 0, void 0, void 0, function* () {
+                    if (respuesta) {
+                        const data = new login_model_1.default;
+                        let token = yield (0, jwt_1.generarJWT)(consulta[0]['uuid'], consulta[0]['contrasena'], consulta[0]['contrasena']);
+                        data.uuid = consulta[0]['uuid'];
+                        data.p_nombre = consulta[0]['p_nombre'];
+                        data.p_apellido = consulta[0]['p_apellido'];
+                        data.tipo_documento = consulta[0]['tipo_documento'];
+                        data.nombre_corto_documento = consulta[0]['n_corto'];
+                        data.email = consulta[0]['email'];
+                        data.docuemento = consulta[0]['docuemento'];
+                        data.rol = consulta[0]['rol'];
+                        data.ip_remota = consulta[0]['ip_remota'];
+                        data.intentos_login = consulta[0]['intentos_login'];
+                        data.online = consulta[0]['online'];
+                        data.token = token;
+                        resolve(data);
+                    }
+                    else {
+                        resolve(null);
+                    }
+                }));
+            }
+            else {
+                resolve(null);
+            }
         }));
     });
 });
