@@ -16,7 +16,8 @@ exports.menu = void 0;
 const consultar_menu_1 = require("./controllers/consultar-menu");
 const response_1 = __importDefault(require("../../../helpers/response"));
 const menu = (request, response) => __awaiter(void 0, void 0, void 0, function* () {
-    yield (0, consultar_menu_1.consultarMenu)(request.params.rol, response).then(respuesta => {
+    console.log("entra a la api");
+    yield (0, consultar_menu_1.consultarMenu)(request.body.rol, response).then(respuesta => {
         try {
             const data = new response_1.default();
             data.json(respuesta, 200, response, "OK", "Información consultada con éxito");

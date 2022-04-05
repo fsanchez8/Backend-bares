@@ -6,4 +6,4 @@ const login_controller_1 = require("../app/features/auth/login.controller");
 const menu_controller_1 = require("../app/features/menu/menu.controller");
 const router = (0, express_1.Router)();
 exports.LOGIN = router.post("/login", login_controller_1.Login);
-exports.MENU = router.get("/menu/:rol", menu_controller_1.menu);
+exports.MENU = router.post("/menu", menu_controller_1.menu);
